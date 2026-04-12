@@ -1,15 +1,33 @@
-  let frases = [];
+let frases = [];
+let currentIndex = -1;
 
-  function mostrarFraseAleatoria() {
+function getRandomIndex() {
+    if (frases.length <= 1) return 0;
+    let newIndex;
+    do {
+        newIndex = Math.floor(Math.random() * frases.length);
+    } while (newIndex === currentIndex);
+    return newIndex;
+}
+
+function animateFraseChange() {
+    const fraseEl = document.getElementById('frase');
+    fraseEl.style.animation = 'none';
+    fraseEl.offsetHeight;
+    fraseEl.style.animation = 'fade-in 2s ease-out forwards';
+}
+
+function mostrarFraseAleatoria() {
     if (frases.length > 0) {
-      const indice = Math.floor(Math.random() * frases.length);
-      const frase = frases[indice];
-      document.getElementById("frase").innerText = frase;
-      document.getElementById("capture-text").innerText = frase;
+        currentIndex = getRandomIndex();
+        const frase = frases[currentIndex];
+        document.getElementById("frase").innerText = frase;
+        document.getElementById("capture-text").innerText = frase;
+        animateFraseChange();
     }
-  }
+}
 
-  async function compartirFrase() {
+async function compartirFrase() {
     const captureArea = document.getElementById('capture-area');
     const shareBtn = document.getElementById('share-btn');
     
@@ -17,49 +35,49 @@
     shareBtn.style.opacity = '0.5';
     
     try {
-      const canvas = await html2canvas(captureArea, {
-        scale: 1,
-        useCORS: true,
-        backgroundColor: '#0d1b2a'
-      });
-      
-      const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
-      const file = new File([blob], 'frase-tufrasedehoy.png', { type: 'image/png' });
-      
-      if (navigator.share && navigator.canShare({ files: [file] })) {
-        await navigator.share({
-          files: [file],
-          title: 'TuFraseDeHoy',
-          text: 'Una frase para vos'
+        const canvas = await html2canvas(captureArea, {
+            scale: 1,
+            useCORS: true,
+            backgroundColor: '#050510'
         });
-      } else {
+        
+        const blob = await new Promise(resolve => canvas.toBlob(resolve, 'image/png'));
+        const file = new File([blob], 'frase-tufrasedehoy.png', { type: 'image/png' });
+        
+        if (navigator.share && navigator.canShare({ files: [file] })) {
+            await navigator.share({
+                files: [file],
+                title: 'TuFraseDeHoy',
+                text: 'Una frase para vos'
+            });
+        } else {
+            const link = document.createElement('a');
+            link.download = 'frase-tufrasedehoy.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        }
+    } catch (error) {
+        console.error('Error al compartir:', error);
+        alert('No se pudo compartir. Descargando imagen...');
+        
+        const canvas = await html2canvas(captureArea, { scale: 1 });
         const link = document.createElement('a');
         link.download = 'frase-tufrasedehoy.png';
         link.href = canvas.toDataURL('image/png');
         link.click();
-      }
-    } catch (error) {
-      console.error('Error al compartir:', error);
-      alert('No se pudo compartir. Descargando imagen...');
-      
-      const canvas = await html2canvas(captureArea, { scale: 1 });
-      const link = document.createElement('a');
-      link.download = 'frase-tufrasedehoy.png';
-      link.href = canvas.toDataURL('image/png');
-      link.click();
     } finally {
-      shareBtn.disabled = false;
-      shareBtn.style.opacity = '0.6';
+        shareBtn.disabled = false;
+        shareBtn.style.opacity = '1';
     }
-  }
+}
 
-  document.getElementById('share-btn').addEventListener('click', compartirFrase);
+document.getElementById('share-btn').addEventListener('click', compartirFrase);
 
-  fetch("frases_completas.json")
+fetch("frases_completas.json")
     .then(response => response.json())
     .then(data => {
-      frases = data;
-      mostrarFraseAleatoria();
-      setInterval(mostrarFraseAleatoria, 150000);
+        frases = data;
+        mostrarFraseAleatoria();
+        setInterval(mostrarFraseAleatoria, 150000);
     })
     .catch(error => console.error("Error al cargar frases:", error));

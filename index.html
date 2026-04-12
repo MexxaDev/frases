@@ -11,6 +11,13 @@
     <title>TuFraseDeHoy</title>
 </head>
 <body>
+    <div class="cosmic-bg">
+        <div class="nebula nebula-1"></div>
+        <div class="nebula nebula-2"></div>
+        <div class="nebula nebula-3"></div>
+        <div class="galaxy-texture"></div>
+    </div>
+    
     <div class="stars-container">
         <svg class="star" style="top: 8%; left: 12%; width: 8px;" viewBox="0 0 20 20"><circle cx="10" cy="10" r="2" fill="#f5f0e6"/></svg>
         <svg class="star" style="top: 15%; left: 85%; width: 6px;" viewBox="0 0 20 20"><circle cx="10" cy="10" r="1.5" fill="#f5f0e6"/></svg>
@@ -46,14 +53,14 @@
     
     <div class="content">
         <div class="frase-container">
-            <p id="frase"></p>
+            <p id="frase" class="frase-text"></p>
             <div class="divider">
                 <svg width="200" height="20" viewBox="0 0 200 20">
                     <path d="M0 10 Q50 8 100 10 T200 10" stroke="#f5f0e6" stroke-width="1" fill="none" opacity="0.4"/>
                     <circle cx="100" cy="10" r="2" fill="#f5f0e6" opacity="0.6"/>
                 </svg>
             </div>
-            <div class="controls">
+            <div class="share-section">
                 <button id="share-btn" class="share-btn" title="Compartir">
                     <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/>
@@ -61,6 +68,7 @@
                         <line x1="12" y1="2" x2="12" y2="15"/>
                     </svg>
                 </button>
+                <p class="share-text">Si te gustó la frase, compartila en tu Instagram</p>
             </div>
         </div>
     </div>
